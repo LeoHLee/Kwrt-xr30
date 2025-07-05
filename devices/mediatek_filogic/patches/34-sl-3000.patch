@@ -1,6 +1,6 @@
 --- a/target/linux/mediatek/image/filogic.mk
 +++ b/target/linux/mediatek/image/filogic.mk
-@@ -1672,3 +1672,43 @@ define Device/zyxel_nwa50ax-pro
+@@ -1672,3 +1672,77 @@ define Device/zyxel_nwa50ax-pro
    IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
  endef
  TARGET_DEVICES += zyxel_nwa50ax-pro
@@ -44,6 +44,40 @@
 +endef
 +TARGET_DEVICES += kst_wf3000a
 +
++define Device/newland_nl-wr8103
++  DEVICE_VENDOR := newland
++  DEVICE_MODEL := nl-wr8103
++  DEVICE_DTS := mt7981-newland-nl-wr8103 
++  DEVICE_DTS_DIR := ../dts
++  UBINIZE_OPTS := -E 5
++  BLOCKSIZE := 128k
++  PAGESIZE := 2048
++  DEVICE_PACKAGES := kmod-mt7915e kmod-mt7981-firmware mt7981-wo-firmware
++ifneq ($(CONFIG_TARGET_ROOTFS_INITRAMFS),)
++  ARTIFACTS := initramfs-factory.ubi
++  ARTIFACT/initramfs-factory.ubi := append-image-stage initramfs-kernel.bin | ubinize-kernel
++endif
++  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
++endef
++TARGET_DEVICES += newland_nl-wr8103 
++
++define Device/newland_nl-wr9103
++  DEVICE_VENDOR := newland
++  DEVICE_MODEL := nl-wr9103
++  DEVICE_DTS := mt7981-newland-nl-wr9103 
++  DEVICE_DTS_DIR := ../dts
++  UBINIZE_OPTS := -E 5
++  BLOCKSIZE := 128k
++  PAGESIZE := 2048
++  DEVICE_PACKAGES := kmod-mt7915e kmod-mt7981-firmware mt7981-wo-firmware
++ifneq ($(CONFIG_TARGET_ROOTFS_INITRAMFS),)
++  ARTIFACTS := initramfs-factory.ubi
++  ARTIFACT/initramfs-factory.ubi := append-image-stage initramfs-kernel.bin | ubinize-kernel
++endif
++  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
++endef
++TARGET_DEVICES += newland_nl-wr9103
++
 
 --- a/package/boot/uboot-envtools/files/mediatek_filogic
 +++ b/package/boot/uboot-envtools/files/mediatek_filogic
@@ -74,12 +108,14 @@
 
 --- a/target/linux/mediatek/filogic/base-files/etc/board.d/02_network
 +++ b/target/linux/mediatek/filogic/base-files/etc/board.d/02_network
-@@ -40,6 +40,8 @@
+@@ -40,6 +40,10 @@
  	ikuai,q3000|\
  	jcg,q30-pro|\
  	qihoo,360t7|\
 +	kst,wf3000a|\
 +	sl,3000*|\
++	newland,nl-wr8103|\
++	newland,nl-wr9103|\
  	routerich,ax3000|\
  	routerich,ax3000-ubootmod)
  		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3" wan

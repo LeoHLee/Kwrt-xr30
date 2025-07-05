@@ -1,4 +1,4 @@
-diff --git a/package/boot/uboot-tools/uboot-envtools/files/mediatek_filogic b/package/boot/uboot-tools/uboot-envtools/files/mediatek_filogic
+diff --git a/package/boot/uboot-envtools/files/mediatek_filogic b/package/boot/uboot-envtools/files/mediatek_filogic
 index 18d6014f0790c3..0dc1cf6bf332b8 100644
 --- a/package/boot/uboot-tools/uboot-envtools/files/mediatek_filogic
 +++ b/package/boot/uboot-tools/uboot-envtools/files/mediatek_filogic
@@ -171,20 +171,6 @@ index 00000000000000..82396a6adfffcc
 +};
 
 diff --git a/target/linux/mediatek/filogic/base-files/etc/board.d/02_network b/target/linux/mediatek/filogic/base-files/etc/board.d/02_network
-index 7eb69133104181..0f93b1a83abd9a 100644
---- a/target/linux/mediatek/filogic/base-files/etc/board.d/02_network
-+++ b/target/linux/mediatek/filogic/base-files/etc/board.d/02_network
-@@ -43,6 +43,8 @@ mediatek_setup_interfaces()
- 	jcg,q30-pro|\
- 	keenetic,kn-3811|\
- 	qihoo,360t7|\
-+        newland,nl-wr8103|\
-+        newland,nl-wr9103|\
- 	routerich,ax3000|\
- 	routerich,ax3000-ubootmod|\
- 	tenbay,wr3000k)
-
-diff --git a/target/linux/mediatek/filogic/base-files/etc/board.d/02_network b/target/linux/mediatek/filogic/base-files/etc/board.d/02_network
 index 0f93b1a83abd9a..547fbcc2505177 100644
 --- a/target/linux/mediatek/filogic/base-files/etc/board.d/02_network
 +++ b/target/linux/mediatek/filogic/base-files/etc/board.d/02_network
@@ -214,8 +200,8 @@ index f027c306b11a91..f83dfe52aefa12 100644
  		;;
  	routerich,ax3000|\
  	routerich,ax3000-ubootmod|\
-+        newland,nl-wr8103|\
-+        newland,nl-wr9103|\
++	newland,nl-wr8103|\
++	newland,nl-wr9103|\
  	zbtlink,zbt-z8102ax|\
  	zbtlink,zbt-z8103ax|\
  	zyxel,ex5601-t0-stock|\
@@ -224,67 +210,15 @@ diff --git a/target/linux/mediatek/filogic/base-files/lib/upgrade/platform.sh b/
 index 5788b13978d814..c1940d95972c7d 100755
 --- a/target/linux/mediatek/filogic/base-files/lib/upgrade/platform.sh
 +++ b/target/linux/mediatek/filogic/base-files/lib/upgrade/platform.sh
-@@ -89,6 +89,8 @@ platform_do_upgrade() {
- 	netcore,n60|\
- 	netcore,n60-pro|\
- 	qihoo,360t7|\
-+        newland,nl-wr8103|\
-+        newland,nl-wr9103|\
- 	routerich,ax3000-ubootmod|\
-  	snr,snr-cpe-ax2|\
- 	tplink,tl-xdr4288|\
-@@ -221,6 +223,8 @@ platform_check_image() {
+@@ -85,6 +85,8 @@ platform_do_upgrade() {
  	openwrt,one|\
  	netcore,n60|\
  	qihoo,360t7|\
-+        newland,nl-wr8103|\
-+        newland,nl-wr9103|\
++	newland,nl-wr8103|\
++	newland,nl-wr9103|\
  	routerich,ax3000-ubootmod|\
  	tplink,tl-xdr4288|\
  	tplink,tl-xdr6086|\
-
-diff --git a/target/linux/mediatek/image/filogic.mk b/target/linux/mediatek/image/filogic.mk
-index 8b18e252a19c26..44154b2a60737a 100644
---- a/target/linux/mediatek/image/filogic.mk
-+++ b/target/linux/mediatek/image/filogic.mk
-@@ -2076,3 +2076,37 @@ define Device/zyxel_nwa50ax-pro
-   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
- endef
- TARGET_DEVICES += zyxel_nwa50ax-pro
-+
-+define Device/newland_nl-wr8103
-+  DEVICE_VENDOR := newland
-+  DEVICE_MODEL := nl-wr8103
-+  DEVICE_DTS := mt7981-newland-nl-wr8103 
-+  DEVICE_DTS_DIR := ../dts
-+  UBINIZE_OPTS := -E 5
-+  BLOCKSIZE := 128k
-+  PAGESIZE := 2048
-+  DEVICE_PACKAGES := kmod-mt7915e kmod-mt7981-firmware mt7981-wo-firmware
-+ifneq ($(CONFIG_TARGET_ROOTFS_INITRAMFS),)
-+  ARTIFACTS := initramfs-factory.ubi
-+  ARTIFACT/initramfs-factory.ubi := append-image-stage initramfs-kernel.bin | ubinize-kernel
-+endif
-+  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
-+endef
-+TARGET_DEVICES += newland_nl-wr8103 
-+
-+define Device/newland_nl-wr9103
-+  DEVICE_VENDOR := newland
-+  DEVICE_MODEL := nl-wr9103
-+  DEVICE_DTS := mt7981-newland-nl-wr9103 
-+  DEVICE_DTS_DIR := ../dts
-+  UBINIZE_OPTS := -E 5
-+  BLOCKSIZE := 128k
-+  PAGESIZE := 2048
-+  DEVICE_PACKAGES := kmod-mt7915e kmod-mt7981-firmware mt7981-wo-firmware
-+ifneq ($(CONFIG_TARGET_ROOTFS_INITRAMFS),)
-+  ARTIFACTS := initramfs-factory.ubi
-+  ARTIFACT/initramfs-factory.ubi := append-image-stage initramfs-kernel.bin | ubinize-kernel
-+endif
-+  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
-+endef
-+TARGET_DEVICES += newland_nl-wr9103 
 
 diff --git a/target/linux/mediatek/filogic/base-files/etc/board.d/01_leds b/target/linux/mediatek/filogic/base-files/etc/board.d/01_leds
 index 19e815b415a62a..90be0d9ee89b4c 100644
