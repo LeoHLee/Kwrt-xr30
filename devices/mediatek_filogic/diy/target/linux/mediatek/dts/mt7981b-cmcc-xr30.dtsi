@@ -51,18 +51,14 @@
 		compatible = "gpio-leds";
 
 		white_led: led-0 {
+			label = "xr30:white";
 			function = LED_FUNCTION_STATUS;
 			color = <LED_COLOR_ID_WHITE>;
-			gpios = <&pio 35 GPIO_ACTIVE_LOW>;
-		};
-
-		led-1 {
-			function = LED_FUNCTION_STATUS;
-			color = <LED_COLOR_ID_BLUE>;
-			gpios = <&pio 12 GPIO_ACTIVE_LOW>;
+			gpios = <&pio 34 GPIO_ACTIVE_LOW>;
 		};
 
 		red_led: led-2 {
+			label = "xr30:red";
 			function = LED_FUNCTION_STATUS;
 			color = <LED_COLOR_ID_RED>;
 			gpios = <&pio 35 GPIO_ACTIVE_LOW>;
